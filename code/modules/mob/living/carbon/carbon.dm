@@ -73,6 +73,10 @@
 	if(throwingdatum.force <= MOVE_FORCE_WEAK)
 		hurt = FALSE
 
+	var/signal_flags = SEND_SIGNAL(src, COMSIG_CARBON_THROW_IMPACT, hit_atom, throwingdatum)
+	if(signal_flags)
+		return (signal_flags & COMPONENT_NO_IMPACT) ? null : ..() //If the NO_IMPACT flag isn't set, then SPECIAL_IMPACT must be set. BE SURE TO UPDATE THIS IF MORE FLAGS ARE ADDED.
+
 	if(iscarbon(hit_atom) && hit_atom != src)
 		var/mob/living/carbon/victim = hit_atom
 		if(!(victim.movement_type & FLYING))

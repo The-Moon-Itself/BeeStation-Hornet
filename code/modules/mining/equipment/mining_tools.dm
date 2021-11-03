@@ -133,3 +133,39 @@
 	force = 5
 	throwforce = 7
 	w_class = WEIGHT_CLASS_SMALL
+
+//Damage multiplier when user is launched, might need some tweaking
+#define KINETIC_SHOVEL_FORCE_MULTIPLIER 3
+
+/obj/item/shovel/kinetic_shovel
+	name = "kinetic shovel"
+	desc = "A strange modified shovel that allows a wielder to channel their aerial momentum into an attack. Only a lunatic would use this."
+	force = 15
+
+/obj/item/shovel/kinetic_shovel/equipped(mob/user, slot)
+	. = ..()
+	if(slot == ITEM_SLOT_HANDS)
+		RegisterSignal(user, COMSIG_CARBON_THROW_IMPACT, .proc/on_carbon_impact)
+	else
+		UnregisterSignal(user, COMSIG_CARBON_THROW_IMPACT)
+
+/obj/item/shovel/kinetic_shovel/dropped(mob/user)
+	. = ..()
+	UnregisterSignal(user, COMSIG_CARBON_THROW_IMPACT)
+
+/obj/item/shovel/kinetic_shovel/proc/on_carbon_impact(mob/living/carbon/user, atom/hit_atom)
+	SIGNAL_HANDLER
+
+	if(isliving(hit_atom))
+		var/mob/living/H = hit_atom
+		attack_verb += "gardened" //CRITICAL HIT!
+		src.force *= KINETIC_SHOVEL_FORCE_MULTIPLIER
+		src.attack(H, user)
+		attack_verb -= "gardened"
+		src.force /= KINETIC_SHOVEL_FORCE_MULTIPLIER
+		if(iscarbon(H))
+			H.Paralyze(20) //Mimic /mob/living/carbon/throw_impact(), but don't knock down self and use different message
+			user.visible_message("<span class='danger'>[user]'s attack knocks [H] over!</span>",\
+					"<span class='userdanger'>Your attack knocked [H] over!</span>")
+
+	return COMPONENT_SPECIAL_IMPACT
