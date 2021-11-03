@@ -168,4 +168,4 @@
 			user.visible_message("<span class='danger'>[user]'s attack knocks [H] over!</span>",\
 					"<span class='userdanger'>Your attack knocked [H] over!</span>")
 
-	return COMPONENT_SPECIAL_IMPACT
+		return COMPONENT_SPECIAL_IMPACT
