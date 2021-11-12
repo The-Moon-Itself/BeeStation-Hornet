@@ -134,13 +134,12 @@
 	throwforce = 7
 	w_class = WEIGHT_CLASS_SMALL
 
-//Damage multiplier when user is launched, might need some tweaking
-#define KINETIC_SHOVEL_FORCE_MULTIPLIER 3
-
 /obj/item/shovel/kinetic_shovel
 	name = "kinetic shovel"
 	desc = "A strange modified shovel that allows a wielder to channel their aerial momentum into an attack. Only a lunatic would use this."
+	icon_state = "gardener"
 	force = 15
+	var/force_multiplier = 3
 
 /obj/item/shovel/kinetic_shovel/equipped(mob/user, slot)
 	. = ..()
@@ -159,10 +158,10 @@
 	if(isliving(hit_atom))
 		var/mob/living/H = hit_atom
 		attack_verb += "gardened" //CRITICAL HIT!
-		src.force *= KINETIC_SHOVEL_FORCE_MULTIPLIER
+		src.force *= force_multiplier //Multiplied incase something else is affecting the force as well
 		src.attack(H, user)
 		attack_verb -= "gardened"
-		src.force /= KINETIC_SHOVEL_FORCE_MULTIPLIER
+		src.force /= force_multiplier
 		if(iscarbon(H))
 			H.Paralyze(20) //Mimic /mob/living/carbon/throw_impact(), but don't knock down self and use different message
 			user.visible_message("<span class='danger'>[user]'s attack knocks [H] over!</span>",\
