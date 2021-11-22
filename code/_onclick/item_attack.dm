@@ -81,7 +81,7 @@
 	M.lastattacker = user.real_name
 	M.lastattackerckey = user.ckey
 
-	user.do_attack_animation(M)
+	user.do_attack_animation(M, null, src)
 	M.attacked_by(src, user)
 
 	log_combat(user, M, "attacked", src.name, "(INTENT: [uppertext(user.a_intent)]) (DAMTYPE: [uppertext(damtype)])")
