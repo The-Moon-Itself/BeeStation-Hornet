@@ -382,3 +382,52 @@
 
 /obj/effect/temp_visual/teleport_abductor/syndi_teleporter
 	duration = 5
+
+/obj/item/teleporter_switch
+	name = "Bluespace \"Switcher\" Prototype"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "hand_tele"
+	item_state = "electronic"
+	lefthand_file = 'icons/mob/inhands/misc/devices_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/misc/devices_righthand.dmi'
+
+/obj/item/teleporter_switch/attack(mob/living/M, mob/living/user)
+	return
+
+/obj/item/teleporter_switch/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = ..()
+	var/mob/T = target
+	if(!istype(T))
+		return
+	var/turf/A = user.drop_location()
+	var/turf/B = T.drop_location()
+
+	if(do_teleport(user, B, channel = TELEPORT_CHANNEL_BLUESPACE))
+		do_teleport(T, A, channel = TELEPORT_CHANNEL_BLUESPACE)
+
+/obj/item/teleporter_tourist
+	name = "Bluespace \"Tourist\" Prototype"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "hand_tele"
+	item_state = "electronic"
+	lefthand_file = 'icons/mob/inhands/misc/devices_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/misc/devices_righthand.dmi'
+
+	var/ready = TRUE
+
+/obj/item/teleporter_tourist/attack(mob/living/M, mob/living/user)
+	return
+
+/obj/item/teleporter_tourist/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = ..()
+	var/turf/T = get_turf(target)
+	var/turf/current = user.drop_location()
+	if(do_teleport(user, T, channel = TELEPORT_CHANNEL_BLUESPACE))
+		ready = FALSE
+		addtimer(CALLBACK(src, .proc/recall, user, current), 2 SECONDS)
+
+//A proc to put into a callback to use do_teleport()'s channel argument
+/obj/item/teleporter_tourist/proc/recall(mob/user, turf/origin)
+	. = do_teleport(user, origin, channel = TELEPORT_CHANNEL_FREE) //You WILL go back to where you came
+	ready = TRUE
+
