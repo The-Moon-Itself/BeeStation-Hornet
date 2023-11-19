@@ -5,7 +5,7 @@ import { Window } from '../layouts';
 
 const PX_PER_UNIT = 24;
 
-class PaintCanvas extends Component {
+export class PaintCanvas extends Component {
   constructor(props) {
     super(props);
     this.canvasRef = createRef();
