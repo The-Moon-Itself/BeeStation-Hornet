@@ -57,6 +57,7 @@
 		"titaniumglass",
 		"xenoa_labeler",
 		"xlarge_beaker",
+		"epaperread"
 	)
 
 /datum/techweb_node/mmi
@@ -154,6 +155,7 @@
 		"screwdriver",
 		"shovel",
 		"spade",
+		"stethoscope",
 		"surgical_drapes",
 		"surgicaldrill",
 		"syringe",
@@ -185,6 +187,7 @@
 		"comp_get_column",
 		"comp_get_name",
 		"comp_gps",
+		"comp_relative_coords",
 		"comp_health",
 		"comp_hear",
 		"comp_index_table",
@@ -284,7 +287,7 @@
 		"dish_drive",
 		"fat_sucker",
 		"gibber",
-		"gibber",
+		"griddle",
 		"microwave",
 		"monkey_recycler",
 		"processor",
@@ -448,6 +451,7 @@
 		"rcd_loaded",
 		"rpd_loaded",
 		"weldingmask",
+		"sheetifier"
 	)
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 2500)
 	export_price = 5000
@@ -745,6 +749,7 @@
 		"comp_bitwise",
 		"comp_hyper_trig",
 		"comp_trig",
+		"comp_abs",
 	)
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 1000)
 
@@ -1318,7 +1323,7 @@
 		"med_scanner",
 		"posibrain",
 	)
-	design_ids = list("healthanalyzer_advanced")
+	design_ids = list("healthanalyzer_advanced", "extrapolator")
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 5000)
 	export_price = 5000
 
@@ -1561,6 +1566,8 @@
 		"pepperspray",
 		"seclite",
 		"zipties",
+		"turnstile",
+		"genpop_interface",
 	)
 	prereq_ids = list("base")
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 1000)
@@ -1573,8 +1580,9 @@
 	description = "Unlocks new designs that improve rapid devices."
 	design_ids = list(
 		"rcd_upgrade_frames",
+		"rcd_upgrade_furnishing",
 		"rcd_upgrade_simple_circuits",
-		"rpd_upgrade_unwrench",
+		"rpd_upgrade_unwrench"
 	)
 	prereq_ids = list("adv_engi")
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 2500)

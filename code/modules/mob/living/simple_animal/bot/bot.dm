@@ -95,7 +95,8 @@
 	"Beginning Patrol", "Patrolling", "Summoned by PDA", \
 	"Cleaning", "Repairing", "Proceeding to work site", "Healing", \
 	"Proceeding to AI waypoint", "Navigating to Delivery Location", "Navigating to Home", \
-	"Waiting for clear path", "Calculating navigation path", "Pinging beacon network", "Unable to reach destination")
+	"Waiting for clear path", "Calculating navigation path", "Pinging beacon network", "Unable to reach destination", \
+	"Empty Container")
 	var/datum/atom_hud/data/bot_path/path_hud = new /datum/atom_hud/data/bot_path()
 	var/path_image_icon = 'icons/mob/aibots.dmi'
 	var/path_image_icon_state = "path_indicator"
@@ -832,6 +833,8 @@ Pass a positive integer as an argument to override a bot's default speed.
 // given an optional turf to avoid
 /mob/living/simple_animal/bot/proc/calc_path(turf/avoid)
 	check_bot_access()
+	if(!isturf(src.loc))
+		return
 	if(!is_reserved_level(z))
 		if(patrol_target != null)
 			if(z > patrol_target.z)

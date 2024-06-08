@@ -1,3 +1,6 @@
+///BSA unlocked by head ID swipes
+GLOBAL_VAR_INIT(bsa_unlock, FALSE)
+
 // Crew has to build a bluespace cannon
 // Cargo orders part for high price
 // Requires high amount of power
@@ -130,7 +133,7 @@ DEFINE_BUFFER_HANDLER(/obj/machinery/bsa/middle)
 	name = "Bluespace Artillery"
 	desc = "Long range bluespace artillery."
 	icon = 'icons/obj/lavaland/cannon.dmi'
-	icon_state = "orbital_cannon1"
+	icon_state = "cannon_west"
 	var/static/mutable_appearance/top_layer
 	var/ex_power = 3
 	var/power_used_per_shot = 2000000 //enough to kil standard apc - todo : make this use wires instead and scale explosion power with it
@@ -308,8 +311,14 @@ DEFINE_BUFFER_HANDLER(/obj/machinery/bsa/middle)
 	var/list/options = gps_locators
 	if(area_aim)
 		options += GLOB.teleportlocs
-	var/V = input(user,"Select target", "Select target",null) in options|null
-	target = options[V]
+	var/victim = tgui_input_list(user, "Select target", "Artillery Targeting", options)
+	if(isnull(victim))
+		return
+	if(isnull(options[victim]))
+		return
+	target = options[victim]
+	var/datum/component/gps/log_target = target
+	log_game("[key_name(user)] has aimed the bluespace artillery strike (BSA) at [get_area_name(log_target.parent)].")
 
 
 /obj/machinery/computer/bsa_control/proc/get_target_name()

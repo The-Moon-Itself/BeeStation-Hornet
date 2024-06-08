@@ -432,22 +432,21 @@ Difficulty: Hard
 		did_reset = FALSE
 
 /mob/living/simple_animal/hostile/megafauna/hierophant/AttackingTarget()
-	if(!blinking)
-		if(target && isliving(target))
-			var/mob/living/L = target
-			if(L.stat != DEAD)
-				if(ranged_cooldown <= world.time)
-					calculate_rage()
-					ranged_cooldown = world.time + max(5, ranged_cooldown_time - anger_modifier * 0.75)
-					INVOKE_ASYNC(src, PROC_REF(burst), get_turf(src))
-				else
-					burst_range = 3
-					INVOKE_ASYNC(src, PROC_REF(burst), get_turf(src), 0.25) //melee attacks on living mobs cause it to release a fast burst if on cooldown
-				OpenFire()
-			else
-				devour(L)
-		else
-			return ..()
+	if(blinking)
+		return
+	if(!target || !isliving(target))
+		return ..()
+	var/mob/living/L = target
+	if(L.stat == DEAD)
+		return
+	if(ranged_cooldown <= world.time)
+		calculate_rage()
+		ranged_cooldown = world.time + max(5, ranged_cooldown_time - anger_modifier * 0.75)
+		INVOKE_ASYNC(src, PROC_REF(burst), get_turf(src))
+	else
+		burst_range = 3
+		INVOKE_ASYNC(src, PROC_REF(burst), get_turf(src), 0.25) //melee attacks on living mobs cause it to release a fast burst if on cooldown
+	OpenFire()
 
 /mob/living/simple_animal/hostile/megafauna/hierophant/DestroySurroundings()
 	if(!blinking)
@@ -677,14 +676,15 @@ Difficulty: Hard
 			L.adjustBruteLoss(damage)
 		if(caster)
 			log_combat(caster, L, "struck with a [name]")
-	for(var/obj/mecha/M in T.contents - hit_things) //also damage mechs.
+	for(var/obj/vehicle/sealed/mecha/M in T.contents - hit_things) //also damage mechs.
 		hit_things += M
-		if(M.occupant)
-			if(friendly_fire_check && caster && caster.faction_check_mob(M.occupant))
+		for(var/O in M.occupants)
+			var/mob/living/occupant = O
+			if(friendly_fire_check && caster && caster.faction_check_mob(occupant))
 				continue
-			to_chat(M.occupant, "<span class='userdanger'>Your [M.name] is struck by a [name]!</span>")
-		playsound(M,'sound/weapons/sear.ogg', 50, 1, -4)
-		M.take_damage(damage, BURN, 0, 0)
+			to_chat(occupant, "<span class='userdanger'>Your [M.name] is struck by a [name]!</span>")
+			playsound(M,'sound/weapons/sear.ogg', 50, TRUE, -4)
+			M.take_damage(damage, BURN, 0, 0)
 
 /obj/effect/temp_visual/hierophant/blast/vortex
 	damage = 25
@@ -697,9 +697,6 @@ Difficulty: Hard
 	light_range = 2
 	layer = LOW_OBJ_LAYER
 	anchored = TRUE
-
-/obj/effect/hierophant/ex_act()
-	return
 
 /obj/effect/hierophant/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/hierophant_club))
