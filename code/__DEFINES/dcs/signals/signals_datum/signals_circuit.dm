@@ -66,6 +66,9 @@
 /// Called when something passes through a scanner gate shell
 #define COMSIG_SCANGATE_SHELL_PASS "scangate_shell_pass"
 
+// Called when someone clicks on the screen shell's UI
+#define COMSIG_SCREEN_SHELL_CLICKED "screen_shell_clicked"
+
 /// Sent when the value of a port is set.
 #define COMSIG_PORT_SET_VALUE "port_set_value"
 /// Sent when the type of a port is set.

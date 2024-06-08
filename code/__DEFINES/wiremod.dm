@@ -177,6 +177,10 @@
 #define COMP_TEXT_LOWER "To Lower"
 #define COMP_TEXT_UPPER "To Upper"
 
+// Tilemap components
+#define COMP_FLIP_X 0x08
+#define COMP_FLIP_Y 0x10
+
 // Typecast component
 #define COMP_TYPECAST_MOB "organism"
 #define COMP_TYPECAST_HUMAN "humanoid"
